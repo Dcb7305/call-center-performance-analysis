@@ -28,6 +28,7 @@ print("\n--- Trend check: start vs. end (30-row averages) ---")
 for col in trend_cols:
     start, end = first[f"{col} (30-row avg)"], last[f"{col} (30-row avg)"]
     print(f"{col:30} start: {start:8.3f}   end: {end:8.3f}   change: {end - start:+8.3f}")
+
 # --- Step 4: Plot the trends ---
 CHART_DIR = Path(__file__).resolve().parent / "charts"
 CHART_DIR.mkdir(exist_ok=True)
@@ -45,6 +46,7 @@ fig.suptitle("Call Center Trends (30-row rolling average)", fontsize=14)
 fig.tight_layout()
 fig.savefig(CHART_DIR / "trends.png", dpi=150)
 print(f"\nChart saved to {CHART_DIR / 'trends.png'}")
+
 # --- Step 5: Does call volume drive performance? ---
 perf_cols = ["Answer Rate", "Service Level (20 Seconds)", "Waiting Time (AVG)", "Abandoned Calls"]
 corr = df[perf_cols].corrwith(df["Incoming Calls"])
@@ -59,3 +61,21 @@ compare = pd.DataFrame({
 })
 print("\n--- Crisis period vs. rest of data (averages) ---")
 print(compare.round(3).to_string())
+
+# --- Step 6: Export a Tableau-ready CSV ---
+OUTPUT_DIR = Path(__file__).resolve().parent / "output"
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+tableau_df = df.rename(columns={
+    "Answer Speed (AVG)": "Answer Speed (sec)",
+    "Talk Duration (AVG)": "Talk Duration (sec)",
+    "Waiting Time (AVG)": "Waiting Time (sec)",
+})
+tableau_df["Period"] = crisis.map({True: "Crisis (690-950)", False: "Normal"})
+tableau_df["Volume Band"] = pd.cut(
+    tableau_df["Incoming Calls"],
+    bins=[0, 150, 300, float("inf")],
+    labels=["Low (<150)", "Medium (150-300)", "High (300+)"],
+)
+tableau_df.to_csv(OUTPUT_DIR / "call_center_tableau.csv", index=False)
+print(f"\nTableau file saved to {OUTPUT_DIR / 'call_center_tableau.csv'}")

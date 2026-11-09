@@ -70,6 +70,8 @@ I checked the data before trusting it, rather than assuming it was clean:
 
 Built in Power BI from the cleaned BigQuery table. Daily rows were grouped into 30-day periods ("months") to show trends clearly. Rates and averages are weighted by call volume, so busy days count more than quiet ones. The Power BI file and a PDF export are in the [Power BI folder](Power%20BI/).
 
+**Interactive Tableau dashboard:** [View on Tableau Public](https://public.tableau.com/app/profile/christopher.barber/viz/CallCenterPerformanceAnalysis_17942478966440/Dashboard)
+
 ## Python Trend Analysis
 
 ![Call Center Trends](Python/charts/trends.png)
