@@ -70,8 +70,17 @@ I checked the data before trusting it, rather than assuming it was clean:
 
 Built in Power BI from the cleaned BigQuery table. Daily rows were grouped into 30-day periods ("months") to show trends clearly. Rates and averages are weighted by call volume, so busy days count more than quiet ones. The Power BI file and a PDF export are in the [Power BI folder](Power%20BI/).
 
-## Key Findings
+## Python Trend Analysis
 
+![Call Center Trends](Python/charts/trends.png)
+
+Script: [`Python/01-trend-analysis.py`](Python/01-trend-analysis.py)
+
+- 30-row rolling averages show a major performance crisis around rows 690–950 that the start-vs-end comparison hides.
+- Call volume drove it: volume nearly doubled, abandoned calls rose ~7x, and service level fell from 75% to 57%.
+- Performance holds below ~300 incoming calls and drops sharply above it, suggesting a staffing capacity ceiling.
+
+## Key Findings
 - **Overall performance fell short of target.** 248K incoming calls, an 89.1% answer rate, and a 10.9% abandon rate. Only 63.8% of calls were answered within 20 seconds, well below the common 80/20 service level target.
 - **Call volume varies widely.** Daily calls range from 5 to 1,575, with an average of 198.5.
 - **A demand spike broke service.** The busiest days cluster around days 839–884, peaking at 1,575 calls (about 8x the average). Monthly volume jumped from a typical 4K–6K to as high as ~15.6K, and service level fell to about 30%. Totals reconcile on every day, so this is a real surge, not a data error, and it was kept in the analysis.
@@ -84,5 +93,5 @@ Built in Power BI from the cleaned BigQuery table. Daily rows were grouped into 
 - **Plan for spikes:** Add staff or overflow support when monthly volume passes ~8K.
 - **Dig into normal-volume swings:** Look into why service level ranges from 53% to 88% even at normal volume, starting with staffing levels and handle time.
 
-- ## Contact
+## Contact
 Chris Barber · www.linkedin.com/in/chrisbarber-analyst
