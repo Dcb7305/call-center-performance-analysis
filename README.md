@@ -1,6 +1,6 @@
 # Call Center Performance Analysis
 
-An end-to-end look at call center performance data: profiling and cleaning it with SQL in Google BigQuery, validating the results, and visualizing it in Power BI. Found that a demand spike dropped service level to ~30% and that waiting time, not talk time, is the main capacity problem.
+An end-to-end look at call center performance data: profiling and cleaning it with SQL in Google BigQuery, validating the results, and visualizing it in Power BI. Found that a demand spike dropped service level to ~34% and that waiting time, not talk time, is the main capacity problem.
 
 ## Tools
 
@@ -68,7 +68,7 @@ I checked the data before trusting it, rather than assuming it was clean:
 
 ![Call Center Performance Dashboard](Power%20BI/dashboard.png)
 
-Built in Power BI from the cleaned BigQuery table. Daily rows were grouped into 30-day periods ("months") to show trends clearly. Rates and averages are weighted by call volume, so busy days count more than quiet ones. The Power BI file and a PDF export are in the [Power BI folder](Power%20BI/).
+Built in Power BI from the cleaned BigQuery table. Daily rows were grouped into 30-day periods ("months") to show trends clearly. Rates and averages are weighted by call volume, so busy days count more than quiet ones. Service level is weighted by answered calls, since it measures the share of answered calls picked up within 20 seconds. The Power BI file and a PDF export are in the [Power BI folder](Power%20BI/).
 
 **Interactive Tableau dashboard:** [View on Tableau Public](https://public.tableau.com/app/profile/christopher.barber/viz/CallCenterPerformanceAnalysis_17942478966440/Dashboard)
 
@@ -83,9 +83,9 @@ Script: [`Python/01-trend-analysis.py`](Python/01-trend-analysis.py)
 - Performance holds below ~300 incoming calls and drops sharply above it, suggesting a staffing capacity ceiling.
 
 ## Key Findings
-- **Overall performance fell short of target.** 248K incoming calls, an 89.1% answer rate, and a 10.9% abandon rate. Only 63.8% of calls were answered within 20 seconds, well below the common 80/20 service level target.
+- **Overall performance fell short of target.** 248K incoming calls, an 89.1% answer rate, and a 10.9% abandon rate. Only 66.8% of calls were answered within 20 seconds (weighted by answered calls), well below the common 80/20 service level target.
 - **Call volume varies widely.** Daily calls range from 5 to 1,575, with an average of 198.5.
-- **A demand spike broke service.** The busiest days cluster around days 839–884, peaking at 1,575 calls (about 8x the average). Monthly volume jumped from a typical 4K–6K to as high as ~15.6K, and service level fell to about 30%. Totals reconcile on every day, so this is a real surge, not a data error, and it was kept in the analysis.
+- **A demand spike broke service.** The busiest days cluster around days 839–884, peaking at 1,575 calls (about 8x the average). Monthly volume jumped from a typical 4K–6K to as high as ~15.6K, and service level fell to about 34%. Totals reconcile on every day, so this is a real surge, not a data error, and it was kept in the analysis.
 - **Callers gave up during the spike.** Answer rates on the busiest days dropped to about 55–60%, meaning roughly 4 in 10 callers hung up before reaching an agent.
 - **Waiting time is the pressure point.** Talk duration stayed fairly steady (about 1–5 minutes), but average waiting time reached as high as 25 min 51 sec. That points to a capacity problem, not a call-handling problem.
 - **Volume explains the big drops, but not everything.** Service level falls sharply once monthly volume passes ~8K. At normal volume it still ranges from ~53% to ~88%, which points to other factors like staffing or handle time.
