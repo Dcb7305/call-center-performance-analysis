@@ -1,6 +1,6 @@
 # Call Center Performance Analysis
 
-An end-to-end look at call center performance data: profiling and cleaning it with SQL in Google BigQuery, validating the results, and visualizing it in Power BI. Found that a demand spike dropped service level to ~34% and that waiting time, not talk time, is the main capacity problem.
+An end-to-end look at call center performance data: profiling and cleaning it with SQL in Google BigQuery, validating the results, and visualizing it in Power BI and Tableau, with a Python trend analysis. Found that a demand spike dropped service level to ~34% and that waiting time, not talk time, is the main capacity problem.
 
 ## Tools
 
@@ -8,6 +8,8 @@ An end-to-end look at call center performance data: profiling and cleaning it wi
 - **Git / GitHub** for version control
 - **Power BI** for dashboards and visual analysis 
 - **Python / pytest** for automated tests of the SQL pipeline
+- **Python (pandas)** for trend analysis (`Python/01-trend-analysis.py`)
+- **Tableau Public** for an interactive KPI dashboard
 
 ## Dataset
 
