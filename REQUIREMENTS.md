@@ -49,10 +49,10 @@ Everyone has to agree on the definitions before the numbers mean anything.
 |--------|------------|-------|
 | Abandon rate | Abandoned calls ÷ incoming calls | Primary KPI for Q1 |
 | Answer rate | Answered calls ÷ incoming calls | Stored as a decimal (0.553 = 55.3%) and shown as a percentage |
-| Service level | % of calls answered within 20 seconds | Provided in the source data |
+| Service level | % of calls answered within 20 seconds | Overall figure is **weighted by answered calls**; compared against the common 80/20 industry target |
 | Handle time (proxy) | Average talk duration | **Assumption:** the dataset has no after-call work time, so talk duration stands in for AHT |
 | Wait time | Average waiting time per call | Converted from TIME to seconds |
-| Monthly figures | Days grouped into 30-day periods | Rates are **weighted by call volume**, so busy days count more than quiet days |
+| Monthly figures | Days grouped into 30-day periods | Answer and abandon rates are **weighted by incoming calls**, and service level by answered calls, so busy days count more than quiet days |
 
 ## 6. Functional requirements
 
@@ -106,14 +106,15 @@ The data must pass every check below before it's used in any report.
 | Used talk duration as the handle time proxy | No after-call work field in the data; noted as an assumption |
 | Grouped days into 30-day periods | Daily data was too noisy to show a trend |
 | Weighted rates by call volume | Prevents a quiet day from counting the same as a 1,500-call day |
+| Weighted service level by answered calls (66.8%) | Service level measures how fast answered calls were picked up, so answered calls are the right base |
 | Kept validation filters in the cleaning script | Protects future loads, even though no rows failed this time |
 
 ## 10. Outcome
 
-- **Q1:** Overall abandon rate was **10.9%** across about 248K calls, above the commonly cited industry range.
-- **Q2:** The main driver was **service level on high-volume days**, not handle time. One demand spike pushed service level from about 80% down to about 30%.
-- **Q3:** The Python analysis identified the daily call volume where performance starts to break down.
-- **Recommendation:** Leadership should run a staffing review focused on high-volume days rather than starting with handle time coaching.
+- **Q1:** Yes. Across about 248K calls, the abandon rate was **10.9%**, and only **66.8%** of calls were answered within 20 seconds, well below the common 80/20 service level target.
+- **Q2:** The main driver was **capacity, not handle time**. Talk duration stayed fairly steady (about 1–5 minutes), while average waiting time reached as high as 25 min 51 sec. During the biggest demand spike (days 839–884), service level fell to about 34% and answer rates dropped to about 55–60%.
+- **Q3:** Performance holds below about **300 incoming calls per day** and drops sharply above it. Monthly, service level falls sharply once volume passes about 8K calls.
+- **Recommendation:** Leadership should run a staffing review focused on days above about 300 calls. Service level still ranges from about 53% to 88% at normal volume, so handle time coaching is worth a second look once capacity is addressed.
 
 ## 11. Open items and future work
 
